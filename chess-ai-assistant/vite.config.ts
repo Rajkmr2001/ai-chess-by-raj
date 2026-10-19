@@ -4,11 +4,10 @@ import tailwindcss from '@tailwindcss/vite';
 
 /**
  * `base` must match the GitHub Pages project path:
- *   https://<user>.github.io/chess-ai-assistant/
- * If you rename the repository, either change the default below or set the
- * VITE_BASE environment variable at build time.
+ *   https://rajkmr2001.github.io/ai-chess-by-raj/
+ * Set VITE_BASE at build time when deploying under a different path.
  */
-const base = process.env.VITE_BASE ?? '/chess-ai-assistant/';
+const base = process.env.VITE_BASE ?? '/ai-chess-by-raj/';
 
 export default defineConfig({
   base,

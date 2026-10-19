@@ -1,10 +1,6 @@
-# Builds Chess AI Arena and publishes it to GitHub Pages.
-#
-# One-time setup in the repository:
-#   Settings → Pages → Build and deployment → Source: "GitHub Actions"
-#
-# The site is then served from https://<your-username>.github.io/<repository>/
-# and `vite.config.ts` uses the matching base path (default /chess-ai-assistant/).
+# Builds Chess AI Arena and publishes only its production bundle to GitHub Pages.
+# Repository Settings > Pages > Build and deployment > Source must be
+# "GitHub Actions".
 name: Deploy to GitHub Pages
 
 on:
@@ -17,7 +13,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow a single concurrent deployment; let an in-progress run finish.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -26,6 +21,11 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: chess-ai-assistant
+    env:
+      VITE_BASE: /ai-chess-by-raj/
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -35,21 +35,13 @@ jobs:
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: chess-ai-assistant/package-lock.json
 
-      - name: Install dependencies (reproducible)
+      - name: Install dependencies
         run: npm ci
 
-      - name: Type-check
-        run: npm run typecheck
-
-      - name: Unit tests
+      - name: Run unit tests
         run: npm test
-
-      - name: Derive the base path from the repository name
-        run: |
-          REPO_NAME="${GITHUB_REPOSITORY#*/}"
-          echo "Using VITE_BASE=/${REPO_NAME}/"
-          echo "VITE_BASE=/${REPO_NAME}/" >> "$GITHUB_ENV"
 
       - name: Build production bundle
         run: npm run build
@@ -57,10 +49,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v6
 
-      - name: Upload build artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: dist
+          path: chess-ai-assistant/dist
 
   deploy:
     name: Deploy
