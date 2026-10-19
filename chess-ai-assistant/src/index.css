@@ -1,0 +1,209 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --breakpoint-xs: 22rem;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, 'Noto Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --color-arena-950: #060a12;
+  --color-arena-900: #0a101c;
+  --color-arena-800: #111a2b;
+}
+
+:root {
+  color-scheme: light;
+  --sq-light: #f0d9b5;
+  --sq-dark: #b58863;
+  --board-shadow: 0 18px 40px -18px rgb(15 23 42 / 0.55);
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  @apply bg-slate-100 text-slate-900 antialiased;
+  background-image:
+    radial-gradient(1100px 520px at 90% -10%, rgb(16 185 129 / 0.1), transparent 60%),
+    radial-gradient(900px 480px at -10% 0%, rgb(59 130 246 / 0.08), transparent 55%);
+  background-attachment: fixed;
+}
+
+.dark body {
+  @apply bg-arena-950 text-slate-100;
+  background-image:
+    radial-gradient(1200px 600px at 92% -8%, rgb(16 185 129 / 0.16), transparent 60%),
+    radial-gradient(900px 520px at -6% 4%, rgb(56 189 248 / 0.1), transparent 55%);
+}
+
+::selection {
+  background: rgb(16 185 129 / 0.28);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(16 185 129 / 0.9);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Surfaces                                                            */
+/* ------------------------------------------------------------------ */
+
+.surface {
+  @apply rounded-2xl border border-slate-200/80 bg-white/90 shadow-sm backdrop-blur-sm;
+}
+
+.dark .surface {
+  @apply border-white/10 bg-slate-900/70 shadow-none;
+}
+
+.surface-muted {
+  @apply rounded-xl border border-slate-200/70 bg-slate-50/80;
+}
+
+.dark .surface-muted {
+  @apply border-white/5 bg-white/[0.03];
+}
+
+.hairline {
+  @apply border-slate-200/70 dark:border-white/10;
+}
+
+.muted {
+  @apply text-slate-500 dark:text-slate-400;
+}
+
+.heading {
+  @apply font-semibold tracking-tight text-slate-900 dark:text-white;
+}
+
+/* ------------------------------------------------------------------ */
+/* Board                                                               */
+/* ------------------------------------------------------------------ */
+
+.board-classic {
+  --sq-light: #f0d9b5;
+  --sq-dark: #b58863;
+}
+
+.board-green {
+  --sq-light: #eeeed2;
+  --sq-dark: #769656;
+}
+
+.board-ocean {
+  --sq-light: #dee3e6;
+  --sq-dark: #7890a8;
+}
+
+.square-light {
+  background-color: var(--sq-light);
+}
+
+.square-dark {
+  background-color: var(--sq-dark);
+}
+
+.board-frame {
+  box-shadow: var(--board-shadow);
+}
+
+.dark .board-frame {
+  box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.9), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+.piece-shadow {
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 0.35));
+}
+
+.dark .piece-shadow {
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.55));
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion                                                              */
+/* ------------------------------------------------------------------ */
+
+@keyframes arena-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.82);
+  }
+}
+
+.pulse-dot {
+  animation: arena-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes arena-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: arena-fade-in 0.18s ease-out both;
+}
+
+@keyframes arena-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.slide-up {
+  animation: arena-slide-up 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse-dot,
+  .fade-in,
+  .slide-up {
+    animation: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Utilities                                                           */
+/* ------------------------------------------------------------------ */
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: rgb(100 116 139 / 0.35);
+  border-radius: 999px;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
